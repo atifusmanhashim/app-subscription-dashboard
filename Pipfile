@@ -7,6 +7,8 @@ name = "pypi"
 django = "==3.2.7"
 requests = "*"
 pymysql = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
