@@ -9,6 +9,9 @@ requests = "*"
 pymysql = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+django-oauth-toolkit = "*"
+fontawesomefree = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
