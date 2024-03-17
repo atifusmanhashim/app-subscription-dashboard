@@ -15,6 +15,7 @@ from . import constants  # Import constants from constants.py
 #For Getting Random String
 from django.utils.crypto import get_random_string
 
+
 class CommonUtils:
     def __init__(self):
         pass
@@ -90,7 +91,7 @@ class CommonUtils:
 
     @staticmethod
     def get_unique_no(start_str):
-        new_unique_no=start_str+get_random_string(constants.code_random_string_length)
+        new_unique_no=start_str+"-"+get_random_string(constants.code_random_string_length)
         return new_unique_no
     
     @staticmethod
@@ -167,3 +168,29 @@ class CommonUtils:
         else:
             query_params = []
         return query_params
+
+    @staticmethod
+    def get_client_ip(request):
+
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip_address = x_forwarded_for.split(',')[0]
+        else:
+            ip_address = request.META.get('REMOTE_ADDR')
+
+        return ip_address
+
+    def get_location(request):
+        #ip_address = get_client_ip(request)
+        ip_address=request.META.get('HTTP_X_FORWARDED_FOR')
+        response = requests.get(f'https://ipapi.co/{ip_address}/json/').json()
+        location_data = {
+            "ip": ip_address,
+            "city": response.get("city"),
+            "region": response.get("region"),
+            "country": response.get("country_name"),
+            "latitude":response.get("latitude"),
+            "longitude":response.get('longitude')
+        }
+        return location_data
+

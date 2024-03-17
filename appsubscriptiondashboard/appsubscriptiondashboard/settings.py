@@ -115,9 +115,6 @@ REST_FRAMEWORK = {
 
         # from oauth2 toolkit
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
-        
-        #from rest-framework social oauth2
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ],
     #Permissions
     'DEFAULT_PERMISSION_CLASSES': [

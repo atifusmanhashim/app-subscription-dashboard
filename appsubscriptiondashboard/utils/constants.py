@@ -15,3 +15,6 @@ short_date="%d-%m-%Y"
 session_expiry_time=86400
 
 code_random_string_length=24
+
+bad_request_status_code=400
+internal_server_status_code=500

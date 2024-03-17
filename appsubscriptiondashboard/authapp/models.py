@@ -64,6 +64,7 @@ class LoginAnalytics(BasicModel):
     user=models.ForeignKey(AppUser, null=True, on_delete=models.CASCADE)
     source=models.CharField (max_length=300, null=True, default=None, blank=True)
     device_ip=models.CharField (max_length=50, null=True, default=None, blank=True)
+    
 
     class Meta:
       db_table = 'app_login_analytics'
