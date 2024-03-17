@@ -1,0 +1,18 @@
+[Unit]
+Description=uWSGI instance to server Grocery Collection project
+After=network.target
+
+[Service]
+User=appsubscriptiondashboard
+Group=webapps
+WorkingDirectory=/webapps/appsubscriptiondashboard/appsubscriptiondashboard
+Environment="PATH=/webapps/appsubscriptiondashboard/bin"
+ExecStart=/webapps/appsubscriptiondashboard/bin/uwsgi --ini /webapps/appsubscriptiondashboard/conf/uwsgi.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+
