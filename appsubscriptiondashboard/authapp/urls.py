@@ -33,10 +33,10 @@ urlpatterns = [
     path('update-profile/',views.UpdateProfile.as_view(),name='update-profile'), 
 
     # #Account Deactivation
-    # path('account-deletion/', views.UserAccountDeletion.as_view(), name='account-deletion'),                            # Account Deletion
+    path('account-deletion/', views.UserAccountDeletion.as_view(), name='account-deletion'),                            # Account Deletion
 
     # #Logout
-    # path('logout/', views.logout, name='logout'),                            # For Logout
+    path('logout/', views.logout, name='logout'),                            # For Logout
 
     # ====================================== Versioning APIs ======================================================================
     
