@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url, include
 from authapp import views as auth_apis
+from subscriptionapp import views as subscriptionapp_apis
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/user/',include('authapp.urls'))
+    path('api/user/',include('authapp.urls')),
+    path('api/subscription/',include('subscriptionapp.urls'))
 ]

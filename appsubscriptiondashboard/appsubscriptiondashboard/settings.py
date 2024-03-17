@@ -121,7 +121,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     
-    'DATETIME_FORMAT': "%Yqn-%m-%d %H:%M:%S",
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
     
     #Exception Handling
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'

@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /webapps/appsubscriptiondashboard
 
 # Install system dependencies
 RUN apt-get update \
@@ -20,7 +20,7 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /app/
-COPY . /app/
+COPY . /webapps/appsubscriptiondashboard
 
 # Copy NGINX configuration
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
@@ -29,4 +29,4 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 
 # Run NGINX and uWSGI services
-CMD service nginx start && uwsgi --ini uwsgi.ini
+CMD service nginx start && uwsgi --ini conf/uwsgi.ini

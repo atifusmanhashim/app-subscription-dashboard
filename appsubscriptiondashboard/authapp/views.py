@@ -377,6 +377,7 @@ class EmailCheck(APIView):
                 data={
                     "response":{
                         "msg":"Email Address not Provided",
+                        'current_version':request.version,
                         "status":status_code
                     }
                 }
@@ -395,6 +396,7 @@ class EmailCheck(APIView):
                     user_data={
                         "msg":"success",
                         "status":status_code,
+                        'current_version':request.version,
                         "data":{
                                     "isUserRegister":True,
                                     "chk_type":chk_type,
@@ -407,6 +409,7 @@ class EmailCheck(APIView):
                     status_code=status.HTTP_200_OK
                     user_data={
                             "msg":"fail",
+                            'current_version':request.version,
                             "status":status_code,
                                 "data":{
                                     "isUserRegister":False,
@@ -505,7 +508,7 @@ class UpdateProfile(APIView):
                 
                 user_data=serializer.data
                 
-                response={'response':{'msg':'success','status':200,'data':user_data}}
+                response={'response':{'msg':'success','current_version':request.version,'status':200,'data':user_data}}
                 return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
@@ -537,7 +540,7 @@ class UserProfile(APIView):
             serializer=self.serializer_class(instance=theuser)
             user_data=serializer.data
             
-            response={'response':{'msg':'success','status':status.HTTP_200_OK,'data':user_data}}
+            response={'response':{'msg':'success','current_version':request.version,'status':status.HTTP_200_OK,'data':user_data}}
             return Response(response, status=status.HTTP_200_OK)
 
         except Exception as e:
@@ -568,26 +571,26 @@ class changepassword(APIView):
                  errors={
                            "ErrorDetail(string='Current Password Not Provided')"
                  }
-                 response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
+                 response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
                  return Response(response, status=status.HTTP_400_BAD_REQUEST)
             if request.data.get('old_password') is None:
                  errors={
                            "ErrorDetail(string='Current Password Not Provided')"
                  }
-                 response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
+                 response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
                  return Response(response, status=status.HTTP_400_BAD_REQUEST)
             if request.data.get('new_password') is None:
 
                  errors={
                            "ErrorDetail(string='New Password Not Provided')"
                  }
-                 response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
+                 response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
                  return Response(response, status=status.HTTP_400_BAD_REQUEST)
             if 'new_password' not in request.data:
                  errors={
                            "ErrorDetail(string='New Password Not Provided')"
                  }
-                 response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
+                 response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
                  return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
             serializer=self.serializer_class(data=request.data)
@@ -605,7 +608,7 @@ class changepassword(APIView):
                     errors={
                            "ErrorDetail(string='Incorrect Current Password')" 
                     }
-                    response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
+                    response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'errors':errors}}
                     return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
                 user.set_password(serializer.data.get('new_password'))
@@ -645,11 +648,11 @@ class changepassword(APIView):
                             'token_type':'Bearer',
                         }      
 
-                response={'response':{'msg':'success','status':status.HTTP_200_OK,'data':user_data}} 
+                response={'response':{'msg':'success','current_version':request.version,'status':status.HTTP_200_OK,'data':user_data}} 
                 return Response(response, status=status.HTTP_200_OK)
 
             else:
-                response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':serializer.errors}} 
+                response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'errors':serializer.errors}} 
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
@@ -719,18 +722,18 @@ class ResetPassword(APIView):
                                     'token_type':'Bearer',
                                 }      
 
-                        response={'response':{'msg':'Password Updated Successfully','status':200,'data':user_data}}
+                        response={'response':{'msg':'Password Updated Successfully','current_version':request.version,'status':200,'data':user_data}}
                         return Response(response, status=status.HTTP_200_OK) 
                     else:
                         response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':{'email':'Incorrect Email Addresss'}}} 
                         return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
                 else:
-                    response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':'Email Address or Password Not Provided'}} 
+                    response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'errors':'Email Address or Password Not Provided'}} 
                     return Response(response, status=status.HTTP_400_BAD_REQUEST)
                 
             else:
-                response={'response':{'msg':'fail','status':400,'errors':str(serializer.errors)}} 
+                response={'response':{'msg':'fail','current_version':request.version,'status':400,'errors':str(serializer.errors)}} 
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
@@ -770,7 +773,7 @@ class UserAccountDeletion(APIView):
             logout=get_logout(token)
             account_deletion=user_account_deactivate(theuser)
 
-            response={'response':{'msg':'success','status':200,'data':[]}}
+            response={'response':{'msg':'success','current_version':request.version,'status':200,'data':[]}}
             return Response(response, status=status.HTTP_200_OK)
 
         except Exception as e:
@@ -808,7 +811,7 @@ def logout(request):
 
         logout=get_logout(token)
         
-        response={'response':{'msg':'success','status':status.HTTP_200_OK}} 
+        response={'response':{'msg':'success','current_version':request.version,'status':status.HTTP_200_OK}} 
         return Response(response, status=status.HTTP_200_OK) 
     except Exception as e:
         message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
