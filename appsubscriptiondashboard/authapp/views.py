@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, views, generics, response, permissions, authentication
 from rest_framework.authtoken.views import ObtainAuthToken  #for Getting Neew Token
 from rest_framework.parsers import JSONParser
+from rest_framework.exceptions import ErrorDetail
 
 from django.contrib.auth import get_user_model  # Using for user default model
 from django.contrib.auth import authenticate    #Using for Login
@@ -23,7 +24,10 @@ from requests.exceptions import HTTPError
 from django.shortcuts import render, HttpResponse
 from django.db.models import Q
 from django.http import HttpRequest
- 
+
+#Versioning
+from rest_framework.versioning import URLPathVersioning
+
 #Settings
 from django.conf import settings
 
@@ -95,6 +99,7 @@ class ApplicationCredentials(APIView):
                 response={
                             'msg':'success',
                             'status':status_code,
+                            'current_version':request.version,
                             'data': {
                                         'client_id':application.client_id,
                                         'client_secret':application.client_secret,
@@ -157,9 +162,7 @@ class UserLogin(APIView):
                         
                         #Creating Customer Instance
 
-                        if user.provider_id is None:
-                            user.provider_id=0
-                            user.save()
+                       
 
                         if user.name is None:
                             user_name=""
@@ -171,33 +174,17 @@ class UserLogin(APIView):
                         else:
                             user_email=""
 
-                        if user.delivery_address is None:
-                            user_delivery_address=""
-                        else:
-                            user_delivery_address=user.delivery_address
-
-
-                        if user.userCity is not None:
-                            user_city=user.userCity.name
-                        else:
-                            user_city=""
-
-                        if user.userCountry is not None:
-                            user_country=user.userCountry.name
-                        else:
-                            user_country=""
-
                         #Get Access Token
                         access_token = get_new_access_token(user) 
                         
                         #Get Refresh Token
                         refresh_token = get_new_refresh_token(user)
 
-                            
-
+                        
                         data={
                             "msg":'success',
                             "status":200,
+                            'current_version':request.version,
                             'data': {
                                         'id':user.id,
                                         'user_no':user.user_no,
@@ -233,12 +220,12 @@ class UserLogin(APIView):
 
 
             else:
+                error_string=CommonUtils.get_serializer_error_desc(serializer.errors)
+                
                 data={
-                    "response":{
-                        "msg":'Something Went Wrong',
-                        "status":status.HTTP_400_BAD_REQUEST,
-                        "errors":str(serializer.errors)
-                    }
+                    
+                    "msg":str(error_string),
+                    "status":status.HTTP_400_BAD_REQUEST,
                 }
                 return Response(data,status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
@@ -332,6 +319,7 @@ class UserCreate(APIView):
                             "response":{
                                 'msg':'Successfully registered',
                                 'status':200,
+                                'current_version':request.version,
                                 'data':{
                                         'id':user.id,
                                         'user_no':user.user_no,
@@ -354,7 +342,7 @@ class UserCreate(APIView):
                     return Response(response, status=status.HTTP_400_BAD_REQUEST)
             else:
                 response={"response":{'msg':'Something Went Wrong','status':status.HTTP_400_BAD_REQUEST,'errors':str(serializer.errors)}}
-                return Response(response, status==status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
                     current_time=CommonUtils.current_date_time(),

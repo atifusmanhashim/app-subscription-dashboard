@@ -1,0 +1,179 @@
+
+Error Date/Time:2024-03-18 01:00:23
+URL:http://127.0.0.1:8000/api/user/register/
+Error:AssertionError("The field 'password' was declared on serializer RegisterSerializer, but has not been included in the 'fields' option.")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 309, in post
+    if serializer.is_valid():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 442, in run_validation
+    value = self.to_internal_value(data)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 495, in to_internal_value
+    for field in fields:
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 378, in _writable_fields
+    for field in self.fields.values():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+AssertionError: The field 'password' was declared on serializer RegisterSerializer, but has not been included in the 'fields' option.
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman@test.com'], 'password': ['test@1234'], 'username': ['atifusman'], 'contact_no': ['+923343467875']}>
+User:None
+Error Date/Time:2024-03-18 01:02:08
+URL:http://127.0.0.1:8000/api/user/register/
+Error:TypeError("AppActionAnalytics() got an unexpected keyword argument 'search_params'")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 328, in post
+    analytics=save_analytics(user,action,request)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/utils/functions.py", line 193, in save_analytics
+    analytics=AppActionAnalytics.objects.create(user=sel_user,
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 451, in create
+    obj = self.model(**kwargs)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/db/models/base.py", line 503, in __init__
+    raise TypeError("%s() got an unexpected keyword argument '%s'" % (cls.__name__, kwarg))
+TypeError: AppActionAnalytics() got an unexpected keyword argument 'search_params'
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman@test.com'], 'password': ['test@1234'], 'username': ['atifusman'], 'contact_no': ['+923343467875']}>
+User:None
+Error Date/Time:2024-03-18 01:10:33
+URL:http://127.0.0.1:8000/api/user/register/
+Error:ValueError('HTTP status code must be an integer from 100 to 599.')
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 363, in post
+    return Response(response, status==status.HTTP_400_BAD_REQUEST)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/response.py", line 30, in __init__
+    super().__init__(None, status=status)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/template/response.py", line 36, in __init__
+    super().__init__('', content_type, status, charset=charset, headers=headers)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/http/response.py", line 329, in __init__
+    super().__init__(*args, **kwargs)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/http/response.py", line 124, in __init__
+    raise ValueError('HTTP status code must be an integer from 100 to 599.')
+ValueError: HTTP status code must be an integer from 100 to 599.
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman1@test.com'], 'password': ['test@1234'], 'username': ['atifusman'], 'contact_no': ['+923343467872']}>
+User:None
+Error Date/Time:2024-03-18 01:13:54
+URL:http://127.0.0.1:8000/api/user/login/
+Error:AssertionError("The field 'password' was declared on serializer LoginSerializer, but has not been included in the 'fields' option.")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 142, in post
+    if serializer.is_valid():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 442, in run_validation
+    value = self.to_internal_value(data)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 495, in to_internal_value
+    for field in fields:
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 378, in _writable_fields
+    for field in self.fields.values():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+AssertionError: The field 'password' was declared on serializer LoginSerializer, but has not been included in the 'fields' option.
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman1@test.com'], 'password': ['test@1234'], 'username': ['atifusman1'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:25:32
+URL:http://127.0.0.1:8000/api/user/login/
+Error:NameError("name 'username' is not defined")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 142, in post
+    if serializer.is_valid():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 445, in run_validation
+    value = self.validate(value)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/serializers.py", line 83, in validate
+    user = authenticate(email=username, password=attrs['password'])
+NameError: name 'username' is not defined
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman1@test.com'], 'password': ['test@1234'], 'username': ['atifusman1'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:33:55
+URL:http://127.0.0.1:8000/api/user/login/
+Error:TypeError("'AppUser' object is not subscriptable")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 144, in post
+    user = serializer.validated_data['user']
+TypeError: 'AppUser' object is not subscriptable
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman1@test.com'], 'password': ['test@1234'], 'username': ['atifusman1'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:35:27
+URL:http://127.0.0.1:8000/api/user/login/
+Error:AttributeError("'AppUser' object has no attribute 'provider_id'")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 164, in post
+    if user.provider_id is None:
+AttributeError: 'AppUser' object has no attribute 'provider_id'
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman1@test.com'], 'password': ['test@1234'], 'username': ['atifusman1'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:36:59
+URL:http://127.0.0.1:8000/api/user/login/
+Error:AttributeError("'AppUser' object has no attribute 'delivery_address'")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 176, in post
+    if user.delivery_address is None:
+AttributeError: 'AppUser' object has no attribute 'delivery_address'
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman1@test.com'], 'password': ['test@1234'], 'username': ['atifusman1'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:39:28
+URL:http://127.0.0.1:8000/api/user/login/
+Error:AssertionError('.validate() should return the validated data')
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 142, in post
+    if serializer.is_valid():
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 446, in run_validation
+    assert value is not None, '.validate() should return the validated data'
+AssertionError: .validate() should return the validated data
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman@test.com'], 'password': ['test@123'], 'username': ['atifusman'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:46:36
+URL:http://127.0.0.1:8000/api/user/login/
+Error:KeyError(0)
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 223, in post
+    "msg":str(serializer.errors[0]),
+KeyError: 0
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman@test.com'], 'password': ['test@123'], 'username': ['atifusman'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:47:40
+URL:http://127.0.0.1:8000/api/user/login/
+Error:TypeError('dict.items() takes no arguments (1 given)')
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 223, in post
+    "msg":str(serializer.errors.items(0)),
+TypeError: dict.items() takes no arguments (1 given)
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman@test.com'], 'password': ['test@123'], 'username': ['atifusman'], 'contact_no': ['+923343467872']}>
+User:
+Error Date/Time:2024-03-18 01:52:16
+URL:http://127.0.0.1:8000/api/user/login/
+Error:AttributeError("'ErrorDetail' object has no attribute 'string'")
+\Traceback (most recent call last):
+  File "/home/atifusmanhashim/Projects/appsubscriptiondashboard/appsubscriptiondashboard/authapp/views.py", line 228, in post
+    error_message = error_message.string
+AttributeError: 'ErrorDetail' object has no attribute 'string'
+
+Cuurent Inputs:<QueryDict: {'name': ['Atif'], 'email': ['atifusman@test.com'], 'password': ['test@123'], 'username': ['atifusman'], 'contact_no': ['+923343467872']}>
+User:

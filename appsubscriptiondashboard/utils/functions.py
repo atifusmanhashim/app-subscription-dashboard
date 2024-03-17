@@ -191,19 +191,9 @@ def save_analytics(sel_user,sel_action,request):
     location_longitude=location_data['longitude']
 
     analytics=AppActionAnalytics.objects.create(user=sel_user,
-                                                       search_params=request.data, 
                                                        action=sel_action,
-                                                       app_version=app_version,
-                                                       platform=platform,
-                                                       brand=brand,
-                                                       device=device,
-                                                       device_model=device_model,
-                                                       device_ip=device_ip,
-                                                       city_name=city_name,
-                                                       country_name=country_name,
-                                                       region_name=region_name,
-                                                       location_longitude=location_longitude,
-                                                       location_latitude=location_latitude
+                                                       search_params=request.data,
+                                                       device_ip=device_ip
                                                        )
 
 
@@ -229,21 +219,8 @@ def save_login_analytics(sel_user,sel_action,sel_source,request):
     location_longitude=location_data['longitude']
 
 
-    login_analytics=LoginAnalytics.objects.create(user=sel_user,
-                                action=sel_action,
-                                source=sel_source,
-                                app_version=app_version,
-                                platform=platform,
-                                brand=brand,
-                                device=device,
-                                device_model=device_model,
-                                device_ip=device_ip,
-                                city_name=city_name,
-                                country_name=country_name,
-                                region_name=region_name,
-                                location_longitude=location_longitude,
-                                location_latitude=location_latitude
-                            )
+    login_analytics=LoginAnalytics.objects.create(user=sel_user,action=sel_action,
+                                source=sel_source)
 
 
 

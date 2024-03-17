@@ -1,5 +1,6 @@
 from django.utils import timezone
 from datetime import datetime, date, timedelta
+from rest_framework.exceptions import ErrorDetail
 from pathlib import Path
 import datetime
 import math
@@ -180,6 +181,7 @@ class CommonUtils:
 
         return ip_address
 
+    @staticmethod
     def get_location(request):
         #ip_address = get_client_ip(request)
         ip_address=request.META.get('HTTP_X_FORWARDED_FOR')
@@ -194,3 +196,17 @@ class CommonUtils:
         }
         return location_data
 
+    @staticmethod
+    def get_serializer_error_desc(errors):
+        if 'non_field_errors' in errors:
+            # Get the first error message from 'non_field_errors'
+            error_message = errors['non_field_errors'][0]
+            if isinstance(error_message, ErrorDetail):
+                error_message = error_message
+                # Convert ErrorDetail object to string if necessary
+                error_string = str(error_message)
+            else:
+                error_string=""
+        else:
+            error_string=""
+        return error_string

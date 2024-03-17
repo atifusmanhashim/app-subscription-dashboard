@@ -70,14 +70,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     datejoined=serializers.DateTimeField(read_only=True, source='date_joined',format=constants.datetime_format)
     class Meta:
         model = AppUser
-        fields = ('id',
-                  'name',
-                  'email', 
-                  'username', 
-                  'contact_no',
-                  'is_auth',
-                  'datejoined'
-                  )
+        fields = ('__all__')
 
 # Use for Normal Login
 class LoginSerializer(serializers.ModelSerializer):
@@ -87,27 +80,24 @@ class LoginSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=8)
 
     def validate(self, attrs):
-        user = authenticate(username=attrs['email'], password=attrs['password'])
-
-        if not user:
+        # user = authenticate(username=attrs['email'], password=attrs['password'])
+        User = get_user_model()
+        
+        try:
+            user = AppUser.objects.get(email=attrs['email'])
+            if user.check_password(attrs['password']):
+                if user.is_active==True:
+                    return {'user': user}
+                else:
+                    raise serializers.ValidationError('User is disabled.')
+            else:
+                raise serializers.ValidationError('Incorrect email or password.')
+        except AppUser.DoesNotExist:
             raise serializers.ValidationError('Incorrect email or password.')
-
-        if not user.is_active:
-            raise serializers.ValidationError('User is disabled.')
-
-        return {'user': user}
     
-    datejoined=serializers.DateTimeField(read_only=True, source='date_joined',format=constants.datetime_format)
     class Meta:
         model = AppUser
-        fields = ('id',
-                  'name',
-                  'email', 
-                  'username', 
-                  'contact_no',
-                  'is_auth',
-                  'datejoined'
-                  )
+        fields = ('__all__')
     
     
 # User  for Changing Password    

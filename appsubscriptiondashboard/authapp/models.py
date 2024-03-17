@@ -76,6 +76,7 @@ class AppActionAnalytics(BasicModel):
     user=models.ForeignKey(AppUser, null=True, on_delete=models.CASCADE)
     source=models.CharField (max_length=300, null=True, default=None, blank=True)
     device_ip=models.CharField (max_length=50, null=True, default=None, blank=True)
+    search_params=models.TextField(null=True, default=None, blank=True) 
 
     class Meta:
       db_table = 'app_action_analytics'
