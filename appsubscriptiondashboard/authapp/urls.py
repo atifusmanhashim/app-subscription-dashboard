@@ -24,7 +24,13 @@ urlpatterns = [
     path('changepassword/', views.changepassword.as_view(), name='changepassword'),    # For Change Password
     
     # #Reset Password
-    # path('resetpassword/',views.ResetPassword.as_view(), name='resetpassword'),        # For Password Saving
+    path('resetpassword/',views.ResetPassword.as_view(), name='resetpassword'),        # For Password Saving
+
+    #User Profile
+    path('user-profile/',views.UserProfile.as_view(),name='user-profile'),  
+
+    #Update Profile
+    path('update-profile/',views.UpdateProfile.as_view(),name='update-profile'), 
 
     # #Account Deactivation
     # path('account-deletion/', views.UserAccountDeletion.as_view(), name='account-deletion'),                            # Account Deletion
@@ -52,8 +58,14 @@ urlpatterns = [
     # Change Password
     path('<str:version>/changepassword/', views.changepassword.as_view(), name='changepassword'),    # For Change Password
     
-    # #Reset Password
-    # path('<str:version>/resetpassword/',views.ResetPassword.as_view(), name='resetpassword'),        # For Password Saving
+    # Reset Password
+    path('<str:version>/resetpassword/',views.ResetPassword.as_view(), name='resetpassword'),        # For Password Saving
+
+    #User Profile
+    path('<str:version>/user-profile/',views.UserProfile.as_view(),name='user-profile'),  
+
+    #Update Profile
+    path('<str:version>/update-profile/',views.UpdateProfile.as_view(),name='update-profile'), 
 
     # #Account Deactivation
     # path('<str:version>/account-deletion/', views.UserAccountDeletion.as_view(), name='account-deletion'),                            # Account Deletion

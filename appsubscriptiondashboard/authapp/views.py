@@ -678,3 +678,162 @@ class changepassword(APIView):
             CommonUtils.write_log_file(message)
             response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':str(e)}}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+#Reset Password API
+class ResetPassword(APIView):
+    serializer_class=ResetPasswordSerializer
+    
+    def post(self, request, format='json'):
+        try:
+            serializer=self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                #Getting Email Address and New Password from Serializer
+                email_address=serializer.data.get('email')
+                new_password=serializer.data.get('new_password')
+
+                if email_address is not None and new_password is not None:
+                    if AppUser.objects.filter(email=email_address).exists():
+                        user = AppUser.objects.get(email=email_address)
+                        user.set_password(serializer.data.get('new_password'))
+                        user.save()
+                        
+                        access_token = get_new_access_token(user)
+                        refresh_token =  get_new_refresh_token(user)
+
+                        #Saving Analytics
+                        action="Reset-Password"
+                        analytics=save_analytics(user,action,request)
+
+
+
+                        if user.contact_no is None:
+                            user_contact_no=""
+                        else:
+                            user_contact_no=user.contact_no  
+                            
+                        if user.email is None:
+                            user_email=""
+                        else:
+                            user_email=user.email
+
+                                            
+                        user_data={
+                                    'id':user.id,
+                                    'user_no':user.user_no,
+                                    'username':user.username,
+                                    'name':user.name,
+                                    'access_token':access_token.token,
+                                    'expires':CommonUtils.display_date_time(access_token.expires),
+                                    'refresh_token':refresh_token.token,
+                                    'email':user_email,
+                                    'contact_no':user_contact_no,
+                                    'is_auth':user.is_auth,
+                                    'token_type':'Bearer',
+                                }      
+
+                        response={'response':{'msg':'Password Updated Successfully','status':200,'data':user_data}}
+                        return Response(response, status=status.HTTP_200_OK) 
+                    else:
+                        response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':{'email':'Incorrect Email Addresss'}}} 
+                        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+                else:
+                    response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':'Email Address or Password Not Provided'}} 
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                
+            else:
+                response={'response':{'msg':'fail','status':400,'errors':str(serializer.errors)}} 
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
+                    current_time=CommonUtils.current_date_time(),
+                    current_url=request.build_absolute_uri(),
+                    current_error=repr(e),
+                    tb=traceback.format_exc(),
+                    current_input=request.data,
+                    current_user=None
+                    
+            ))
+            
+            CommonUtils.write_log_file(message)
+            response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':str(e)}}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)   
+
+#Account Deletion API
+class UserAccountDeletion(APIView):
+    permission_classes = [IsAuthenticated, ]
+    def post(self, request, format='json'):
+        try:
+            token=request.META['HTTP_AUTHORIZATION'][6:]
+            # Checking Token
+            token=str(token).strip()
+            # Checking User from Instance of Token
+            theuser=get_auth_user(token)
+
+            #Saving Analytics
+            action="Account Deletion"
+            analytics=save_analytics(theuser,action,request)
+
+
+            theuser.contact_no_flag=False
+            theuser.username=theuser.user_no
+            theuser.save()
+
+            logout=get_logout(token)
+            account_deletion=user_account_deactivate(theuser)
+
+            response={'response':{'msg':'success','status':200,'data':[]}}
+            return Response(response, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
+                    current_time=CommonUtils.current_date_time(),
+                    current_url=request.build_absolute_uri(),
+                    current_error=repr(e),
+                    tb=traceback.format_exc(),
+                    current_input=request.data,
+                    current_user=theuser
+
+            ))
+
+
+            CommonUtils.write_log_file(message)
+            response={'response':{'msg':'fail','status':500,'errors':str(e)}}
+            return Response(response, status=500)
+
+# Logout API
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def logout(request):  
+    
+    try:
+        token=request.META['HTTP_AUTHORIZATION'][6:]
+        # Checking Token
+        token=str(token).strip()
+        theuser=get_auth_user(token)
+
+        data=request.data
+
+        #Saving Analytics
+        action="Logout"
+        analytics=save_analytics(theuser,action,request)
+
+        logout=get_logout(token)
+        
+        response={'response':{'msg':'success','status':status.HTTP_200_OK}} 
+        return Response(response, status=status.HTTP_200_OK) 
+    except Exception as e:
+        message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
+                    current_time=CommonUtils.current_date_time(),
+                    current_url=request.build_absolute_uri(),
+                    current_error=repr(e),
+                    tb=traceback.format_exc(),
+                    current_input=request.data,
+                    current_user=theuser
+                    
+        ))
+            
+
+        CommonUtils.write_log_file(message)
+        response={'response':{'msg':'fail','status':500,'errors':str(e)}}
+        return Response(response, status=500)   

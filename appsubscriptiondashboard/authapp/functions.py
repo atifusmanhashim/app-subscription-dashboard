@@ -141,6 +141,7 @@ def get_logout(token):
     
     return True
 
+# Access Token Expiration
 def get_token_expiration():
     # 'Access Token Expiration' and Scopes
     expire_seconds = oauth2_settings.user_settings['ACCESS_TOKEN_EXPIRE_SECONDS']
@@ -169,6 +170,7 @@ def get_access_token(seluser):
     
     return result
 
+# Generating New Access Token
 def get_new_access_token(seluser):
 
     application=get_application_credentials()
@@ -209,6 +211,7 @@ def get_new_refresh_token(seluser):
     result=refresh_token
     return result
 
+# Getting Access Token Details
 def get_access_token_details(seltoken):
 
     if seltoken is not None:
@@ -220,6 +223,7 @@ def get_access_token_details(seltoken):
         access_token=None
     return access_token
 
+# Getting Refresh Token Details
 def get_refresh_token_details(selaccesstoken):
 
     if selaccesstoken is not None:
