@@ -13,6 +13,7 @@ django-oauth-toolkit = "*"
 fontawesomefree = "*"
 python-dotenv = "*"
 mysqlclient = "*"
+pandas = "*"
 
 [dev-packages]
 

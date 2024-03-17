@@ -43,6 +43,33 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+     # For Authentication
+    'authapp.apps.AuthappConfig',
+    
+     # For User App Dashboard
+    'dashboardapp.apps.DashboardappConfig',
+    
+    # App Subscription Dashboard
+    'subscriptionapp.apps.SubscriptionappConfig',
+    
+    #Rest Framework
+    'rest_framework',       
+    
+    #For Authorized Token
+    'rest_framework.authtoken', 
+
+    #Sitemap
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
+    
+    'oauth2_provider',
+    
+    #Cross Origin Headers
+    'corsheaders', 
+    
+    # For Font Awesome Icons 
+    'fontawesomefree'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +80,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'appsubscriptiondashboard.urls'
@@ -60,7 +88,9 @@ ROOT_URLCONF = 'appsubscriptiondashboard.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ 
+            os.path.join(BASE_DIR, 'templates')
+        ],    
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,6 +103,32 @@ TEMPLATES = [
     },
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_VERSIONING_CLASS":"rest_framework.versioning.URLPathVersioning",
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1'],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+
+        # from rest_framework
+        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+
+        # from oauth2 toolkit
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
+        
+        #from rest-framework social oauth2
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ],
+    #Permissions
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    
+    'DATETIME_FORMAT': "%Yqn-%m-%d %H:%M:%S",
+    
+    #Exception Handling
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'
+}
 WSGI_APPLICATION = 'appsubscriptiondashboard.wsgi.application'
 
 
@@ -89,6 +145,22 @@ DATABASES = {
         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
         'PORT': os.getenv('DATABASE_PORT', ''),
     }
+}
+
+# Using for Storing Password in Hash Format
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+]
+
+AUTH_USER_MODEL = 'authapp.AppUser'
+
+#Scopes of Oauth2 Provider
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 86400,
 }
 
 # Password validation
@@ -113,7 +185,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
+# Internationalization
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
+
+DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
 LANGUAGE_CODE = 'en-us'
+
+USE_TZ = True
 
 TIME_ZONE = 'Asia/Karachi'
 
@@ -121,15 +200,53 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+SITE_ID=1
+
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATICFILES_STORAGE='django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+#Cross Origin Headers
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ORIGIN_ALLOW_ALL = True
+
+#CORS_ORIGIN_WHITELIST = ('http://localhost:5000','http://localhost:3000','http://localhost')
+
+#ORS_ALLOWED_ORIGINS = ['*']
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

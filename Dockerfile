@@ -13,6 +13,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends gcc nginx \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt install libmysqlclient-dev
+
 # Install Python dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
