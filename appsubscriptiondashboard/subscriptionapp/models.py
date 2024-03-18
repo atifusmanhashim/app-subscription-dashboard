@@ -59,7 +59,7 @@ class UserAppSubscription(BasicModel):
     subscription_user = models.ForeignKey(AppUser, default=None, null=True,blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.subscription_app.app_name + "(Owner: "+self.subscription_user.name+", Plan: $"+str(self.subscription_plan.subscription_plan_price)+")"
+        return self.subscription_app.app_name
 
     # def subscription_app_name(self):
     #     return self.subscription_app.app_name
