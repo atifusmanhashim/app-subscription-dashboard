@@ -169,7 +169,7 @@ class UpdateUserApp(APIView):
             response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':str(e)}}
             return Response(response, status=status.HTTP_400_BAD_REQUEST) 
         
-#Update of User App
+#Deletion of User App
 class DeleteUserApp(APIView):
     serializer_class = UserAppSerializer
     # Authentication using Bearer Access Token
@@ -235,3 +235,167 @@ class DeleteUserApp(APIView):
             CommonUtils.write_log_file(message)
             response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':str(e)}}
             return Response(response, status=status.HTTP_400_BAD_REQUEST) 
+        
+#Details of User App
+class UserAppDetails(APIView):
+    serializer_class = UserAppSerializer
+    # Authentication using Bearer Access Token
+    permission_classes = [IsAuthenticated, ]
+
+    def post(self, request, *args, **kwargs):
+        theuser=None
+        try:
+            if 'Authorization' in request.headers:
+                token=request.META['HTTP_AUTHORIZATION'][6:]
+
+                token=str(token).strip()
+                theuser=get_auth_user(token)
+                
+                #Saving Analytics
+                action="View Details of UserApp"
+                analytics=save_analytics(theuser,action,request)
+                
+                if 'app_id' in request.data:
+                    sel_app_id=request.data.get('app_id')
+                    sel_user_app=get_user_app(sel_app_id, theuser)
+                else:
+                    sel_app_id=None
+                    sel_user_app=None
+                    
+                if sel_user_app is not None:
+                    
+                   
+                    serializer = self.serializer_class(instance=sel_user_app, partial=True)
+                    mydata=serializer.data
+                    response={'response':{'msg':'success','current_version':request.version,'status':status.HTTP_200_OK,'data':mydata}}
+                    return Response(response, status=status.HTTP_200_OK) 
+     
+                else:
+                    response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_400_BAD_REQUEST,'error':'Invalid App ID Provided'}}
+                    return Response(response, status=status.HTTP_401_UNAUTHORIZED)  
+                
+                    
+            else:
+                response={'response':{'msg':'fail','current_version':request.version,'status':status.HTTP_401_UNAUTHORIZED,'error':'Unauthorized'}}
+                return Response(response, status=status.HTTP_401_UNAUTHORIZED)  
+        except Exception as e:
+            message=("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
+                    current_time=CommonUtils.current_date_time(),
+                    current_url=request.build_absolute_uri(),
+                    current_error=repr(e),
+                    tb=traceback.format_exc(),
+                    current_input=request.data,
+                    current_user=theuser
+                    
+            ))
+            
+            CommonUtils.write_log_file(message)
+            response={'response':{'msg':'fail','status':status.HTTP_400_BAD_REQUEST,'errors':str(e)}}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST) 
+
+# Unsubscribe
+class SubscriptionDelete(APIView):
+    serializer_class = UserAppSubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Extract user from request
+            the_user = request.user
+
+            # Extract subscription_id from request data
+            sel_subscription_id = request.data.get('subscription_id')
+
+            # Get subscription associated with the user and provided subscription_id
+            subscription = UserAppSubscription.objects.filter(subscription_user=the_user, subscription_id=sel_subscription_id).first()
+
+            if subscription:
+                subscription.is_active=False
+                subscription.save()
+                serializer = self.serializer_class(subscription)
+                return Response({'response': {'msg': 'success', 'data': serializer.data}}, status=status.HTTP_200_OK)
+            else:
+                return Response({'response': {'msg': 'fail', 'error': 'Invalid Subscription ID'}}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            message = ("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
+                current_time=CommonUtils.current_date_time(),
+                current_url=request.build_absolute_uri(),
+                current_error=repr(e),
+                tb=traceback.format_exc(),
+                current_input=request.data,
+                current_user=request.user
+            ))
+            CommonUtils.write_log_file(message)
+            return Response({'response': {'msg': 'fail', 'error': str(e)}}, status=status.HTTP_400_BAD_REQUEST)
+
+# Update Subscription with Pricing Plan
+class SubscriptionUpdatePricePlan(APIView):
+    serializer_class = UserAppSubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Extract user from request
+            the_user = request.user
+
+            # Extract subscription_id from request data
+            sel_subscription_id = request.data.get('subscription_id')
+            sel_subscription_plan_id = request.data.get('plan_id')
+            
+            # Get subscription associated with the user and provided subscription_id
+            subscription = UserAppSubscription.objects.filter(subscription_user=the_user, subscription_id=sel_subscription_id, is_active=True).first()
+            subscription_plan = SubscriptionPlan.objects.filter(subscription_plan_id=sel_subscription_plan_id, subscription_plan_price__gt=0, is_active=True).first()
+            if subscription and subscription_plan:
+                subscription.subscription_plan=subscription_plan
+                subscription.save()
+                serializer = self.serializer_class(subscription)
+                return Response({'response': {'msg': 'success', 'data': serializer.data}}, status=status.HTTP_200_OK)
+            else:
+                return Response({'response': {'msg': 'fail', 'error': 'Invalid Subscription ID / Plan ID'}}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            message = ("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
+                current_time=CommonUtils.current_date_time(),
+                current_url=request.build_absolute_uri(),
+                current_error=repr(e),
+                tb=traceback.format_exc(),
+                current_input=request.data,
+                current_user=request.user
+            ))
+            CommonUtils.write_log_file(message)
+            return Response({'response': {'msg': 'fail', 'error': str(e)}}, status=status.HTTP_400_BAD_REQUEST)
+        
+# Subscription Details
+class SubscriptionDetails(APIView):
+    serializer_class = UserAppSubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Extract user from request
+            the_user = request.user
+
+            # Extract subscription_id from request data
+            sel_subscription_id = request.data.get('subscription_id')
+
+            # Get subscription associated with the user and provided subscription_id
+            subscription = UserAppSubscription.objects.filter(subscription_user=the_user, subscription_id=sel_subscription_id).first()
+
+            if subscription:
+                serializer = self.serializer_class(subscription)
+                return Response({'response': {'msg': 'success', 'data': serializer.data}}, status=status.HTTP_200_OK)
+            else:
+                return Response({'response': {'msg': 'fail', 'error': 'Invalid Subscription ID'}}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            message = ("Error Date/Time:{current_time}\nURL:{current_url}\nError:{current_error}\n\{tb}\nCuurent Inputs:{current_input}\nUser:{current_user}".format(
+                current_time=CommonUtils.current_date_time(),
+                current_url=request.build_absolute_uri(),
+                current_error=repr(e),
+                tb=traceback.format_exc(),
+                current_input=request.data,
+                current_user=request.user
+            ))
+            CommonUtils.write_log_file(message)
+            return Response({'response': {'msg': 'fail', 'error': str(e)}}, status=status.HTTP_400_BAD_REQUEST)

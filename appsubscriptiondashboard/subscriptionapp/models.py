@@ -61,15 +61,15 @@ class UserAppSubscription(BasicModel):
     def __str__(self):
         return self.subscription_app.app_name + "(Owner: "+self.subscription_user.name+", Plan: $"+str(self.subscription_plan.subscription_plan_price)+")"
 
-    def subscription_app_name(self):
-        return self.subscription_app.app_name
+    # def subscription_app_name(self):
+    #     return self.subscription_app.app_name
       
-    def subscription_app_description(self):
-        return self.subscription_app.app_description
+    # def subscription_app_description(self):
+    #     return self.subscription_app.app_description
       
-    def subscription_plan_description(self):
-        return self.subscription_plan.subscription_plan_name + "($+"+str(self.subscription_plan.subscription_plan_price)+")"
-    
+    # def subscription_plan_description(self):
+    #     return self.subscription_plan.subscription_plan_name + "($+"+str(self.subscription_plan.subscription_plan_price)+")"
+
     class Meta:
       db_table = 'app_subscriptions'
       ordering=['-subscription_id']

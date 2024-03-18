@@ -175,20 +175,8 @@ def write_log_file(sel_text):
 def save_analytics(sel_user,sel_action,request):
 
     data=request.data
-    app_version = data.get('app_version', None)
-    platform= data.get('platform', None)
-    brand= data.get('brand', None)
-    device= data.get('device_id', None)
-    device_model= data.get('device_model', None)
     device_ip=get_client_ip(request)
 
-    #user_ip_address=get_ip()
-    location_data=get_location(device_ip)
-    city_name=location_data['city']
-    country_name=location_data['country']
-    region_name=location_data['region']
-    location_latitude=location_data['latitude']
-    location_longitude=location_data['longitude']
 
     analytics=AppActionAnalytics.objects.create(user=sel_user,
                                                        action=sel_action,
