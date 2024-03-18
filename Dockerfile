@@ -20,10 +20,10 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /app/
-COPY . /webapps/appsubscriptiondashboard
+COPY . /app
 
 # Copy NGINX configuration
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx-conf/nginx-uwsgi.conf /etc/nginx/nginx.conf
 
 # Expose port 80 for NGINX
 EXPOSE 80
