@@ -59,7 +59,11 @@ class UserAppSubscription(BasicModel):
     subscription_user = models.ForeignKey(AppUser, default=None, null=True,blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.subscription_app.app_name + "(Owner: "+self.subscription_user.name+", Plan: $"+str(self.subscription_plan.subscription_plan_price)+")"
+        if self.subscription_user is not None and self.subscription_plan is not None:
+            return self.subscription_app.app_name + "(Owner: "+self.subscription_user.email+", Plan: $"+str(self.subscription_plan.subscription_plan_price)+")"
+        else:
+            return self.subscription_app.app_name
+        # return self.subscription_app.app_name + "(Owner: "+self.subscription_user.name+", Plan: $"+str(self.subscription_plan.subscription_plan_price)+")"
 
     def subscription_app_name(self):
         return self.subscription_app.app_name
