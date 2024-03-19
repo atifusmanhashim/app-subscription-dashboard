@@ -1,13 +1,13 @@
 [Unit]
-Description=uWSGI instance to server Grocery Collection project
+Description=uWSGI instance to server App Subscription Dashboard project
 After=network.target
 
 [Service]
 User=appsubscriptiondashboard
 Group=webapps
-WorkingDirectory=/webapps/appsubscriptiondashboard/appsubscriptiondashboard
-Environment="PATH=/webapps/appsubscriptiondashboard/bin"
-ExecStart=/webapps/appsubscriptiondashboard/bin/uwsgi --ini /webapps/appsubscriptiondashboard/conf/uwsgi.ini
+WorkingDirectory=/apps/appsubscriptiondashboard/appsubscriptiondashboard
+Environment="PATH=/apps/appsubscriptiondashboard/bin"
+ExecStart=/apps/appsubscriptiondashboard/bin/uwsgi --ini /apps/appsubscriptiondashboard/conf/uwsgi.ini
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
