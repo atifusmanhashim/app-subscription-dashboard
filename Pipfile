@@ -15,6 +15,7 @@ python-dotenv = "*"
 mysqlclient = "*"
 pandas = "*"
 django-braces = "*"
+uwsgi = "*"
 
 [dev-packages]
 
