@@ -21,7 +21,11 @@ from authapp.models import (AppUser)
 
 
 class SubscriptionPlan(BasicModel):
-    subscription_plan_no=CommonUtils.get_unique_no("SubPlan")
+    
+    subscription_plan_no=models.CharField(max_length=50, null=True,
+                            blank=True,
+                            default=CommonUtils.get_unique_no("SubPlan"),
+                            db_index=True)
     subscription_plan_id=models.AutoField (primary_key=True)
     subscription_plan_name = models.CharField(max_length=100)
     subscription_plan_price = models.DecimalField(max_digits=10, default=0.00, decimal_places=2)
@@ -34,7 +38,13 @@ class SubscriptionPlan(BasicModel):
       
 class UserApp(BasicModel):
     
-    app_no=CommonUtils.get_unique_no("UApp")
+    def get_app_no():
+        new_no = CommonUtils.get_unique_no("UApp")
+        return new_no
+    app_no=models.CharField(max_length=50, null=True,
+                            blank=True,
+                            default=get_app_no,
+                            db_index=True)
     app_id=models.AutoField (primary_key=True)
     app_owner = models.ForeignKey(AppUser, default=None, null=True,blank=True, on_delete=models.CASCADE)
     app_name = models.CharField (max_length=150, null=True, default=None, blank=True, unique=True)
@@ -52,7 +62,10 @@ class UserApp(BasicModel):
 
 class UserAppSubscription(BasicModel):
     
-    subscription_no=CommonUtils.get_unique_no("AppSub")
+    subscription_no=models.CharField(max_length=50, null=True,
+                            blank=True,
+                            default=CommonUtils.get_unique_no("AppSub"),
+                            db_index=True)
     subscription_id=models.AutoField (primary_key=True)
     subscription_app = models.OneToOneField(UserApp, default=None, null=True,blank=True, on_delete=models.CASCADE)
     subscription_plan = models.ForeignKey(SubscriptionPlan, default=None, null=True,blank=True, on_delete=models.CASCADE)
