@@ -15,12 +15,21 @@ RUN apt-get update \
 
 RUN apt install libmysqlclient-dev
 
+# Create and activate a virtual environment
+RUN python3.9 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+
 # Install Python dependencies
-COPY requirements.txt /app/
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the current directory contents into the container at /app/
-COPY . /app
+# Copy the current directory contents into the container at /webapps/appsubscriptiondashboard
+COPY . .
+
+# Run migrations
+RUN python manage.py migrate
+
+RUN python manage.py test
 
 # Copy NGINX configuration
 COPY nginx-conf/nginx-uwsgi.conf /etc/nginx/nginx.conf
